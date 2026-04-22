@@ -22,37 +22,37 @@ const BANDS = [
   {
     id: "DevOps Engineer",
     label: "DevOps Engineer",
-    title: "Platform Setup",
+    title: "Member Experience",
     color: C.teal,
     bg: "#CCFBF1",
-    roles: "DevOps · SRE",
-    goal: "Automate and secure infrastructure",
+    roles: "Customer Service · Claims · Care Enrollment",
+    goal: "Optimize member interactions and claim efficiency",
     maxScore: 60,
     thresholds: [24, 39, 48, 60],
     stages: ["🐛 Crawl", "🚶 Walk", "🏃 Run", "✈️ Fly-Ready"],
     modules: [
       {
-        name: "AI Workflow Automation",
+        name: "Member Interaction AI",
         questions: [
-          "I have built automated workflows using AI tools.",
-          "I can identify repetitive CI/CD processes and design AI-assisted automation.",
-          "I regularly use AI for infrastructure management."
+          "I use AI tools to assist in summarizing member calls or enrollment sessions.",
+          "I can identify member pain points using AI-driven sentiment analysis.",
+          "I use AI to help draft clear communications for Medicare Advantage members."
         ],
       },
       {
-        name: "AI Data Handling & Security",
+        name: "Claims & Processing",
         questions: [
-          "I use AI to monitor security logs and anomalies.",
-          "I can identify hallucinations in AI security reports.",
-          "I understand data isolation when using AI on platforms."
+          "I use AI tools to pre-screen claims for errors or potential fraud.",
+          "I can explain how AI identifies anomalies in provider billing patterns.",
+          "I understand data isolation when handling sensitive PII during claims processing."
         ],
       },
       {
-        name: "Prompt Engineering Basics",
+        name: "Medicare Policy Assistance",
         questions: [
-          "I can write a clear prompt for DevOps scripting.",
-          "I track prompt versions in our codebase.",
-          "I verify AI-generated scripts in test environments."
+          "I use AI to quickly search and summarize CMS (Centers for Medicare & Medicaid Services) policy updates.",
+          "I verify AI-generated summaries against official regulatory documents.",
+          "I can prompt AI to compare current and past Medicare Advantage requirements."
         ]
       }
     ],
@@ -60,37 +60,37 @@ const BANDS = [
   {
     id: "QA",
     label: "QA",
-    title: "Quality Assurance",
+    title: "Patient Care Optimization",
     color: C.purple,
     bg: "#EDE9FE",
-    roles: "Testers · Automation Engineers",
-    goal: "Enhance testing with AI",
+    roles: "Case Managers · Nurses · Care Coordinators",
+    goal: "Enhance clinical outcomes with AI support",
     maxScore: 60,
     thresholds: [24, 39, 48, 60],
     stages: ["🐛 Crawl", "🚶 Walk", "🏃 Run", "✈️ Fly-Ready"],
     modules: [
       {
-        name: "AI in Testing",
+        name: "Clinical Documentation",
         questions: [
-          "I use AI to automatically generate test cases.",
-          "I apply AI for visual bug detection.",
-          "I integrate AI analysis in our test reports."
+          "I use AI-assisted tools to summarize clinical notes or patient chart data.",
+          "I apply AI for rapid extraction of key diagnosis codes from medical records.",
+          "I verify all AI-generated clinical summaries for accuracy in patient charts."
         ],
       },
       {
-        name: "Data generation",
+        name: "Triage & Care Planning",
         questions: [
-          "I use AI tools to generate reliable mock data.",
-          "I understand how to scrub prod data using AI tools.",
-          "I use AI to parse complex JSON/XML payloads."
+          "I use AI-powered predictive models to identify high-risk members for care management.",
+          "I understand how AI filters patient flow to prioritize high-acuity cases.",
+          "I use AI to identify social determinants of health (SDOH) in patient data."
         ],
       },
       {
-        name: "Test Automation",
+        name: "Healthcare Governance",
         questions: [
-          "I employ AI copilots when writing playwright/cypress code.",
-          "I use AI to maintain flaky tests.",
-          "I can verify the accuracy of AI test steps."
+          "I understand the safety protocols when using AI tools in clinical triage.",
+          "I check for clinical hallucinations or errors in AI care recommendations.",
+          "I am aware of my organization's policy on AI use in patient interactions."
         ]
       }
     ],
@@ -98,75 +98,37 @@ const BANDS = [
   {
     id: "Manager",
     label: "Manager",
-    title: "Team Leads",
+    title: "Strategic Analytics",
     color: C.amber,
     bg: "#FEF3C7",
-    roles: "Project Managers · Team Leads",
-    goal: "Improve team performance",
+    roles: "Data Analysts · Actuaries · Health Strategists",
+    goal: "Improve population health metrics using AI insights",
     maxScore: 60,
     thresholds: [24, 39, 48, 60],
     stages: ["🐛 Crawl", "🚶 Walk", "🏃 Run", "✈️ Fly-Ready"],
     modules: [
       {
-        name: "AI for Decision Support",
+        name: "Population Analysis",
         questions: [
-          "I use AI-powered dashboards for sprint planning.",
-          "I interpret AI insights for team actions.",
-          "I evaluate reliability of AI recommendations."
+          "I use AI models to predict healthcare utilization trends across our member base.",
+          "I interpret AI insights to adjust resource allocation for community health initiatives.",
+          "I evaluate the reliability of AI-generated projections for member demographic shifts."
         ],
       },
       {
-        name: "Managing AI Teams",
+        name: "Risk Adjustment",
         questions: [
-          "I help my team adapt to new AI tools.",
-          "I define clear AI usage guidelines.",
-          "I identify and nurture AI champions."
+          "I use AI to ensure accurate capturing of member risk scores (HCC coding).",
+          "I apply AI to identify gaps in captured diagnostic data within medical records.",
+          "I track accuracy improvements in Hierarchical Condition Category (HCC) documentation via AI."
         ],
       },
       {
-        name: "AI ROI",
+        name: "Operational Metrics",
         questions: [
-          "I track AI tool adoption metrics in my team.",
-          "I monitor the cost of API usage across initiatives.",
-          "I report productivity improvements from AI."
-        ]
-      }
-    ],
-  },
-  {
-    id: "AI Engineer",
-    label: "AI Engineer",
-    title: "Advanced Modelling",
-    color: C.red,
-    bg: "#FEE2E2",
-    roles: "AI Devs · ML Ops",
-    goal: "Enterprise AI capability",
-    maxScore: 60,
-    thresholds: [24, 39, 48, 60],
-    stages: ["🚶 Walk", "🏃 Run", "✈️ Fly", "✈️ Fly + Lead"],
-    modules: [
-      {
-        name: "Model Optimization",
-        questions: [
-          "I regularly fine-tune LLMs for specific tasks.",
-          "I implement RAG systems securely.",
-          "I evaluate and mitigate model drift."
-        ],
-      },
-      {
-        name: "AI Architecture",
-        questions: [
-          "I design scalable AI inference architectures.",
-          "I understand varying constraints of local vs cloud models.",
-          "I build agentic workflows for complex tasks."
-        ],
-      },
-      {
-        name: "Safety and Governance",
-        questions: [
-          "I implement guardrails on reasoning models.",
-          "I ensure models comply with data protection regulations.",
-          "I execute red-teaming sweeps against applications."
+          "I monitor the cost-effectiveness of AI tools across departmental initiatives.",
+          "I use AI-powered dashboards to track plan performance and member outcomes.",
+          "I report on ROI (Return on Investment) for AI implementations in member care."
         ]
       }
     ],
@@ -174,56 +136,56 @@ const BANDS = [
 ];
 
 const INDUSTRIES = [
-  { id: "it", label: "💻 IT & Software", color: C.teal },
-  { id: "bfsi", label: "🏦 Banking / BFSI", color: C.purple },
-  { id: "health", label: "🏥 Healthcare", color: C.red },
-  { id: "retail", label: "🛒 Retail & E-commerce", color: C.amber },
-  { id: "mfg", label: "🏭 Manufacturing", color: C.green },
-  { id: "edu", label: "🎓 Education", color: C.blue },
+  { id: "clin_ops", label: "🏥 Clinical Operations", color: C.red },
+  { id: "member_serv", label: "📞 Member Services & Claims", color: C.teal },
+  { id: "fin_risk", label: "📊 Finance & Risk Adjustment", color: C.purple },
+  { id: "hr_ld", label: "👥 Human Resources & L&D", color: C.amber },
+  { id: "it_infra", label: "💻 IT & Infrastructure", color: C.blue },
+  { id: "comp_priv", label: "🛡️ Compliance & Privacy", color: C.green },
 ];
 
 const IND_Q = {
-  it: [
-    "My team actively uses AI coding assistants in daily development workflows.",
-    "We have integrated AI into our DevOps pipeline (AI-assisted testing, code review).",
-    "Our product team uses AI for user research, feature prioritisation or roadmap generation.",
-    "We have AI governance for model deployment including monitoring for drift and bias.",
-    "Our engineering leaders can articulate an AI product strategy that differentiates us.",
+  clin_ops: [
+    "Clinical teams use AI tools to support triage, HEDIS reporting or clinical documentation.",
+    "Operations teams use AI for nurse scheduling, patient flow or authorization volume forecasting.",
+    "Our organization has a clear policy on AI use in clinical settings covering patient safety.",
+    "Health plan leaders can distinguish between CMS-compliant AI tools versus experimental software.",
+    "We have piloted AI in at least one clinical outcome use case (e.g. readmission prevention).",
   ],
-  bfsi: [
-    "Our risk or fraud teams use AI-powered models to detect anomalies in real time.",
-    "Relationship managers use AI to personalise client recommendations or segment customers.",
-    "We use AI for regulatory reporting, document review or compliance monitoring workflows.",
-    "Our leadership understands the AI regulatory environment (EU AI Act, GDPR, FCA) and its impact.",
-    "We have an AI risk framework covering model explainability, fairness and audit requirements.",
+  member_serv: [
+    "Member services actively use AI agents to assist with FAQs about benefits or pharmacy networks.",
+    "We have integrated AI into our claims pipeline for auto-adjudication support or error detection.",
+    "Enrollment teams use AI for member outreach, onboarding flows or sentiment monitoring.",
+    "We monitor AI-assisted interactions for accuracy and compliance with Medicare Advantage rules.",
+    "Our member experience leaders can articulate an AI strategy focused on member satisfaction (NPS).",
   ],
-  health: [
-    "Clinical staff use AI tools to support documentation, triage, coding or patient data review.",
-    "Operations teams use AI for scheduling, bed management or patient flow optimisation.",
-    "Our organisation has a clear policy on AI use in clinical settings covering patient safety.",
-    "Healthcare leaders can distinguish between FDA/CE-cleared AI tools versus those that are not.",
-    "We have piloted or deployed AI in at least one clinical use case with documented outcomes.",
+  fin_risk: [
+    "Risk adjustment teams use NLP to identify HCC coding opportunities in medical records.",
+    "Payment integrity teams use AI models to detect overpayments or billing anomalies in real-time.",
+    "We use AI for actuarial analysis, bid preparation or financial forecasting for Medicare plans.",
+    "Our leadership understands the CMS regulatory environment for AI-assisted risk scoring.",
+    "We have an AI fairness framework covering risk models to ensure equitable member coverage.",
   ],
-  retail: [
-    "Our marketing team uses AI for content creation, campaign optimisation or customer segmentation.",
-    "We use AI-powered demand forecasting, inventory optimisation or supply chain planning tools.",
-    "Customer experience teams use AI chatbots or recommendations to personalise the journey.",
-    "Category managers use AI to identify trends, assortment opportunities or pricing signals.",
-    "Our executive team has defined an AI-enabled omnichannel strategy with measurable targets.",
+  hr_ld: [
+    "L&D teams use AI to personalize training paths for clinical and non-clinical staff cohorts.",
+    "We have an AI literacy curriculum focused on HIPAA, PHI and US healthcare compliance.",
+    "HR uses AI for recruitment of specialized medical talent or streamlining onboarding.",
+    "Our leaders understand the ethical implications of AI for employee productivity monitoring.",
+    "We track AI tool adoption across departments to measure upskilling progress.",
   ],
-  mfg: [
-    "Operations teams use AI-powered predictive maintenance to reduce unplanned downtime.",
-    "We use AI-based quality inspection, vision systems or defect detection on the production line.",
-    "AI is integrated into our supply chain planning, demand sensing or logistics optimisation.",
-    "Engineering or R&D teams use AI for product design, simulation or materials discovery.",
-    "Our leadership has a defined Industry 4.0 / smart factory AI roadmap with allocated budget.",
+  it_infra: [
+    "IT teams use AI to automate HIPAA-compliant cloud environment management and monitoring.",
+    "We have AI-powered security logs analyzing for PHI exposure or anomalous access attempts.",
+    "Our AI infrastructure supports RAG systems that only access authorized medical databases.",
+    "Engineering teams use AI to optimize internal platform performance for claims volume peaks.",
+    "We have an AI technology roadmap specifically tailored for healthcare interoperability.",
   ],
-  edu: [
-    "Faculty use AI to personalise learning paths, generate content or provide adaptive assessments.",
-    "Our institution has a clear AI academic integrity policy all stakeholders have been trained on.",
-    "Administrative teams use AI for student support, enrolment management or operations.",
-    "Leaders understand ethical implications of AI in education including student data privacy.",
-    "Our curriculum includes structured AI literacy modules for all students or learner cohorts.",
+  comp_priv: [
+    "Compliance teams use AI to monitor internal communications for HIPAA/privacy violations.",
+    "We use AI-powered dashboards to track regulatory readiness for CMS audit cycles.",
+    "Our AI governance includes model explainability and audit logs for all medical determinations.",
+    "Privacy leaders oversee red-teaming of AI models to prevent 'jailbreaking' for PHI access.",
+    "We have structured CMS compliance reviews for every AI model deployed in operations.",
   ],
 };
 
@@ -389,8 +351,7 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
                 AI Readiness Audit Output
               </h1>
               <p style={{ margin: "3px 0 0", color: "rgba(255,255,255,0.65)", fontSize: 12 }}>
-                {orgInfo.org || "Your Organisation"} · {ind?.label || "General"} ·{" "}
-                {new Date().toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" })}
+                {orgInfo.org || "Your Organization"} · {new Date().toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
               </p>
             </div>
           </div>
@@ -1266,7 +1227,7 @@ function AdminDashboard({ onBack }) {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 25, marginBottom: 30 }}>
+      <div style={{ marginBottom: 30 }}>
         <div style={{
           background: "rgba(255,255,255,0.05)",
           backdropFilter: "blur(10px)",
@@ -1278,7 +1239,7 @@ function AdminDashboard({ onBack }) {
           <h3 style={{ marginTop: 0, color: C.teal, display: "flex", alignItems: "center", gap: 10 }}>
             <span>👥</span> Team-wise Analysis
           </h3>
-          <div style={{ display: "grid", gap: 15 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 15 }}>
             {teams.length === 0 ? <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>No team data available</p> : teams.map(t => {
               const teamSubmissions = filtered.filter(s => s.team === t);
               const pre = teamSubmissions.filter(s => s.assessmentType === "Pre-assessment");
@@ -1297,34 +1258,6 @@ function AdminDashboard({ onBack }) {
                     <div style={{ fontSize: 11 }}>
                       <span style={{ color: "rgba(255,255,255,0.5)" }}>POST:</span> <span style={{ color: C.purple, fontWeight: 700 }}>{getAvgScore(post)}</span>
                     </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        <div style={{
-          background: "rgba(255,255,255,0.05)",
-          backdropFilter: "blur(10px)",
-          padding: 25,
-          borderRadius: 18,
-          border: `1px solid ${C.purple}44`,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.2)"
-        }}>
-          <h3 style={{ marginTop: 0, color: C.purple, display: "flex", alignItems: "center", gap: 10 }}>
-            <span>🏢</span> Industry-wise Analysis
-          </h3>
-          <div style={{ display: "grid", gap: 15 }}>
-            {industries.length === 0 ? <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>No industry data available</p> : industries.map(i => {
-              const indSubmissions = filtered.filter(s => s.industry === i);
-              const label = INDUSTRIES.find(ind => ind.id === i)?.label || i;
-              return (
-                <div key={i} style={{ background: "rgba(255,255,255,0.03)", padding: 15, borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <div style={{ fontWeight: 800, color: "white", fontSize: 15 }}>{label}</div>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, alignItems: "center" }}>
-                    <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>Benchmark Score</div>
-                    <div style={{ fontSize: 18, fontWeight: 900, color: C.purple }}>{getAvgScore(indSubmissions)}</div>
                   </div>
                 </div>
               );
@@ -1378,7 +1311,7 @@ function AdminDashboard({ onBack }) {
                   </td>
                   <td style={{ padding: "15px", fontWeight: 900, color: C.gold, fontSize: 16 }}>{s.score}</td>
                   <td style={{ padding: "15px", color: "rgba(255,255,255,0.6)", fontFamily: "monospace" }}>{s.surveyId}</td>
-                  <td style={{ padding: "15px", borderRadius: "0 10px 10px 0", color: "rgba(255,255,255,0.4)" }}>{new Date(s.timestamp).toLocaleDateString()}</td>
+                  <td style={{ padding: "15px", borderRadius: "0 10px 10px 0", color: "rgba(255,255,255,0.4)" }}>{new Date(s.timestamp).toLocaleDateString("en-US")}</td>
                 </tr>
               ))}
             </tbody>
@@ -1397,13 +1330,13 @@ export default function App() {
   const [orgInfo, setOrgInfo] = useState({
     name: "",
     email: "",
-    surveyId: params.get("sid") || "S-001",
-    surveyName: params.get("sname") || "Q1 Readiness",
+    surveyId: params.get("sid") || "SCAN-001",
+    surveyName: params.get("sname") || "Medicare AI Audit",
     assessmentType: "Pre-assessment",
     team: ""
   });
-  const [selectedBands, setSelectedBands] = useState(["DevOps Engineer", "QA", "Manager", "AI Engineer"]);
-  const [selectedIndustry, setSelectedIndustry] = useState("it");
+  const [selectedBands, setSelectedBands] = useState([]);
+  const [selectedIndustry, setSelectedIndustry] = useState("clin_ops");
   const [curBand, setCurBand] = useState(0);
   const [curMod, setCurMod] = useState(0);
   const [allScores, setAllScores] = useState({});
@@ -1520,9 +1453,9 @@ export default function App() {
         <div style={{ maxWidth: 620, width: "100%" }}>
           <div style={{ textAlign: "center", marginBottom: 32 }}>
             <div style={{ fontSize: 48, marginBottom: 6 }}>🤖</div>
-            <h1 style={{ color: C.gold, fontSize: 34, fontWeight: 900, margin: "0 0 6px" }}>Scan Health</h1>
+            <h1 style={{ color: C.gold, fontSize: 34, fontWeight: 900, margin: "0 0 6px" }}>SCAN Health Plan</h1>
             <p style={{ color: "rgba(255,255,255,0.5)", fontSize: 12, margin: 0, letterSpacing: "0.12em" }}>
-              ENTERPRISE AI · CLOUD · SOFTWARE
+              US-BASED MEDICARE ADVANTAGE SERVICES
             </p>
             <p style={{ color: C.gold, fontSize: 10, marginTop: 10, opacity: 0.6, fontWeight: 700, letterSpacing: "0.05em" }}>
               POWERED BY AIGREV
@@ -1541,16 +1474,16 @@ export default function App() {
               AI Readiness Assessment
             </h2>
             <h3 style={{ color: C.gold, fontSize: 17, fontWeight: 600, margin: "0 0 16px" }}>
-              & Role-Based Framework
+              & Healthcare Framework
             </h3>
             <p style={{ color: "rgba(255,255,255,0.72)", fontSize: 13, lineHeight: 1.8, marginBottom: 24 }}>
-              Measure your organisation's AI readiness across all professional roles and your industry vertical. Receive an instant audit
-              report showing maturity stages, capability gaps, and a prioritised training roadmap.
+              Measure your organization's AI readiness across critical clinical and operational roles. Receive an instant audit
+              report showing maturity stages, capability gaps, and a prioritized training roadmap.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 24 }}>
               {[
-                ["📋", "Questions", "Across 4 roles"],
-                ["🏭", "6 Industries", "Sector-specific AI"],
+                ["📋", "Questions", "Across 3 roles"],
+                ["🏥", "Healthcare", "Integrated context"],
                 ["📊", "Live Scoring", "Instant maturity mapping"],
                 ["🗺️", "Roadmap", "APEX recommendations"],
               ].map(([e, t, d]) => (
@@ -1702,9 +1635,9 @@ export default function App() {
                 borderBottom: `4px solid ${C.gold}`,
               }}
             >
-              <h2 style={{ color: C.gold, margin: 0, fontSize: 20, fontWeight: 800 }}>Organisation Setup</h2>
+              <h2 style={{ color: C.gold, margin: 0, fontSize: 20, fontWeight: 800 }}>Organization Setup</h2>
               <p style={{ color: "rgba(255,255,255,0.65)", margin: "3px 0 0", fontSize: 12 }}>
-                Personalise your audit report with your organisation details.
+                Personalize your audit report with your organization details.
               </p>
             </div>
             <div style={{ padding: 28 }}>
@@ -1788,10 +1721,10 @@ export default function App() {
               </div>
               <div style={{ marginBottom: 22 }}>
                 <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: C.navy, marginBottom: 3 }}>
-                  Select Employee Bands to Assess
+                  Select Healthcare Roles to Assess
                 </label>
                 <p style={{ fontSize: 11, color: "#6B7280", marginBottom: 10 }}>
-                  Choose which bands are present in your organisation.
+                  Choose which roles are present in your organization.
                 </p>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(185px,1fr))", gap: 9 }}>
                   {BANDS.map((b) => {
@@ -1841,39 +1774,6 @@ export default function App() {
                 {selectedBands.length === 0 && (
                   <p style={{ color: C.red, fontSize: 11, marginTop: 6 }}>Please select at least one band.</p>
                 )}
-              </div>
-              <div style={{ marginBottom: 24 }}>
-                <label style={{ display: "block", fontSize: 14, fontWeight: 700, color: C.navy, marginBottom: 3 }}>
-                  Select Your Industry Vertical
-                </label>
-                <p style={{ fontSize: 11, color: "#6B7280", marginBottom: 10 }}>
-                  Industry-specific questions will be added to your assessment.
-                </p>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(160px,1fr))", gap: 9 }}>
-                  {INDUSTRIES.map((i) => {
-                    const sel = selectedIndustry === i.id;
-                    return (
-                      <div
-                        key={i.id}
-                        onClick={() => setSelectedIndustry(sel ? null : i.id)}
-                        style={{
-                          border: `2px solid ${sel ? i.color : "#E5E7EB"}`,
-                          borderRadius: 9,
-                          padding: "11px 13px",
-                          cursor: "pointer",
-                          background: sel ? i.color + "11" : "white",
-                          transition: "all 0.2s",
-                          textAlign: "center",
-                        }}
-                      >
-                        <div style={{ fontSize: 20, marginBottom: 3 }}>{i.label.split(" ")[0]}</div>
-                        <div style={{ fontSize: 11, fontWeight: sel ? 700 : 500, color: sel ? i.color : "#374151" }}>
-                          {i.label.split(" ").slice(1).join(" ")}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
               </div>
               <button
                 onClick={() => {
