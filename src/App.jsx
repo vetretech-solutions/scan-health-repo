@@ -1432,7 +1432,7 @@ export default function App() {
       }
 
       alert('Assessment submitted and saved successfully! 🎉');
-      setStep("results");
+      window.location.href = window.location.pathname; // Reloads to home and clears state
     } catch (error) {
       console.error('Error saving assessment:', error);
       alert('Error saving assessment locally');
