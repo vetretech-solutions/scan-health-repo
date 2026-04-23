@@ -1195,17 +1195,25 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
     loadData();
   }, [googleScriptUrl]);
 
-  const filtered = submissions.filter(s =>
-    (filterId === "" || (s.surveyId && s.surveyId.toString().toLowerCase().includes(filterId.toLowerCase()))) &&
-    (filterName === "" || (s.surveyName && s.surveyName.toString().toLowerCase().includes(filterName.toLowerCase())))
-  );
+  const filtered = submissions.filter(s => {
+    const sid = s.surveyId || s["Survey ID"] || "";
+    const sname = s.surveyName || s["Survey Name"] || "";
+    return (
+      (filterId === "" || sid.toString().toLowerCase().includes(filterId.toLowerCase())) &&
+      (filterName === "" || sname.toString().toLowerCase().includes(filterName.toLowerCase()))
+    );
+  });
 
-  const teams = [...new Set(submissions.map(s => s.team))].filter(Boolean);
-  const industries = [...new Set(submissions.map(s => s.industry))].filter(Boolean);
+  const teams = [...new Set(submissions.map(s => s.team || s.Team))].filter(Boolean);
+  const industries = [...new Set(submissions.map(s => s.industry || s.Industry))].filter(Boolean);
 
   const getAvgScore = (list) => {
-    if (!list.length) return 0;
-    const sum = list.reduce((a, b) => a + (Number(b.score) || 0), 0);
+    if (!list.length) return "0.0";
+    // Checking all possible casing and space variations from the Google Sheet
+    const sum = list.reduce((a, b) => {
+      const val = b.score || b.Score || b.totalScore || b["Total Score"] || 0;
+      return a + Number(val);
+    }, 0);
     return (sum / list.length).toFixed(1);
   };
 
@@ -1305,9 +1313,9 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
               gap: 20 
             }}>
               {teams.map(t => {
-                const tSubs = filtered.filter(s => s.team === t);
-                const pre = tSubs.filter(s => s.assessmentType === "Pre-assessment");
-                const post = tSubs.filter(s => s.assessmentType === "Post-assessment");
+                const tSubs = filtered.filter(s => (s.team || s.Team) === t);
+                const pre = tSubs.filter(s => (s.assessmentType || s["Assessment Type"] || "").includes("Pre"));
+                const post = tSubs.filter(s => (s.assessmentType || s["Assessment Type"] || "").includes("Post"));
                 return (
                   <div key={t} style={{ 
                     background: "rgba(255,255,255,0.05)", 
@@ -1373,17 +1381,19 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
                 filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map((s, idx) => (
                   <tr key={idx} style={{ background: "rgba(255,255,255,0.05)", transition: "0.2s" }}>
                     <td style={{ padding: "20px", borderRadius: "12px 0 0 12px", fontWeight: 800 }}>{s.name}</td>
-                    <td>{s.team}</td>
+                    <td>{s.team || s.Team}</td>
                     <td>
                       <span style={{
-                        background: s.assessmentType === "Pre-assessment" ? "#134e4a" : "#4c1d95",
-                        color: s.assessmentType === "Pre-assessment" ? "#2dd4bf" : "#c084fc",
+                        background: (s.assessmentType || s["Assessment Type"] || "").includes("Pre") ? "#134e4a" : "#4c1d95",
+                        color: (s.assessmentType || s["Assessment Type"] || "").includes("Pre") ? "#2dd4bf" : "#c084fc",
                         padding: "4px 10px", borderRadius: 8, fontSize: 10, fontWeight: 800
                       }}>
-                        {s.assessmentType === "Pre-assessment" ? "PRE" : "POST"}
+                        {(s.assessmentType || s["Assessment Type"] || "").includes("Pre") ? "PRE" : "POST"}
                       </span>
                     </td>
-                    <td style={{ color: C.gold, fontWeight: 900, fontSize: 18 }}>{s.score}</td>
+                    <td style={{ color: C.gold, fontWeight: 900, fontSize: 18 }}>
+                      {s.score || s.Score || s.totalScore || s["Total Score"] || "0"}
+                    </td>
                     <td style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>{s.surveyId}</td>
                     <td style={{ padding: "0 20px", borderRadius: "0 12px 12px 0", color: "rgba(255,255,255,0.4)", fontSize: 12 }}>
                       {s.timestamp ? new Date(s.timestamp).toLocaleDateString("en-GB") : "N/A"}
