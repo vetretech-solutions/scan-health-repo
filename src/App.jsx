@@ -1204,15 +1204,25 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
     );
   });
 
-  const teams = [...new Set(submissions.map(s => s.team || s.Team))].filter(Boolean);
-  const industries = [...new Set(submissions.map(s => s.industry || s.Industry))].filter(Boolean);
+  const teams = [...new Set(submissions.map(s => {
+    const key = Object.keys(s).find(k => k.toLowerCase().replace(/\s/g, "") === "team");
+    return key ? s[key] : (s.team || s.Team);
+  }))].filter(Boolean);
+  const industries = [...new Set(submissions.map(s => {
+    const key = Object.keys(s).find(k => k.toLowerCase().replace(/\s/g, "") === "industry");
+    return key ? s[key] : (s.industry || s.Industry);
+  }))].filter(Boolean);
 
   const getAvgScore = (list) => {
     if (!list.length) return "0.0";
-    // Checking all possible casing and space variations from the Google Sheet
     const sum = list.reduce((a, b) => {
-      const val = b.score || b.Score || b.totalScore || b["Total Score"] || 0;
-      return a + Number(val);
+      // Aggressive key search: finds any key that looks like "totalscore" or "score"
+      const scoreKey = Object.keys(b).find(k => 
+        k.toLowerCase().replace(/\s/g, "") === "totalscore" || 
+        k.toLowerCase() === "score"
+      );
+      const val = scoreKey ? b[scoreKey] : (b.score || b.Score || 0);
+      return a + Number(val || 0);
     }, 0);
     return (sum / list.length).toFixed(1);
   };
@@ -1313,7 +1323,10 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
               gap: 20 
             }}>
               {teams.map(t => {
-                const tSubs = filtered.filter(s => (s.team || s.Team) === t);
+                const tSubs = filtered.filter(s => {
+                  const key = Object.keys(s).find(k => k.toLowerCase().replace(/\s/g, "") === "team");
+                  return (key ? s[key] : (s.team || s.Team)) === t;
+                });
                 const pre = tSubs.filter(s => (s.assessmentType || s["Assessment Type"] || "").includes("Pre"));
                 const post = tSubs.filter(s => (s.assessmentType || s["Assessment Type"] || "").includes("Post"));
                 return (
@@ -1381,7 +1394,10 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
                 filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map((s, idx) => (
                   <tr key={idx} style={{ background: "rgba(255,255,255,0.05)", transition: "0.2s" }}>
                     <td style={{ padding: "20px", borderRadius: "12px 0 0 12px", fontWeight: 800 }}>{s.name}</td>
-                    <td>{s.team || s.Team}</td>
+                    <td>{(() => {
+                      const key = Object.keys(s).find(k => k.toLowerCase().replace(/\s/g, "") === "team");
+                      return key ? s[key] : (s.team || s.Team);
+                    })()}</td>
                     <td>
                       <span style={{
                         background: (s.assessmentType || s["Assessment Type"] || "").includes("Pre") ? "#134e4a" : "#4c1d95",
@@ -1392,7 +1408,13 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
                       </span>
                     </td>
                     <td style={{ color: C.gold, fontWeight: 900, fontSize: 18 }}>
-                      {s.score || s.Score || s.totalScore || s["Total Score"] || "0"}
+                      {(() => {
+                        const scoreKey = Object.keys(s).find(k => 
+                          k.toLowerCase().replace(/\s/g, "") === "totalscore" || 
+                          k.toLowerCase() === "score"
+                        );
+                        return scoreKey ? s[scoreKey] : (s.score || s.Score || "0");
+                      })()}
                     </td>
                     <td style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>{s.surveyId}</td>
                     <td style={{ padding: "0 20px", borderRadius: "0 12px 12px 0", color: "rgba(255,255,255,0.4)", fontSize: 12 }}>
