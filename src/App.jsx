@@ -29,8 +29,8 @@ const BANDS = [
     bg: "#CCFBF1",
     roles: "Customer Service · Claims · Care Enrollment",
     goal: "Optimize member interactions and claim efficiency",
-    maxScore: 60,
-    thresholds: [24, 39, 48, 60],
+    maxScore: 45,
+    thresholds: [18, 29, 36, 45],
     stages: ["🐛 Crawl", "🚶 Walk", "🏃 Run", "✈️ Fly-Ready"],
     modules: [
       {
@@ -67,8 +67,8 @@ const BANDS = [
     bg: "#EDE9FE",
     roles: "Case Managers · Nurses · Care Coordinators",
     goal: "Enhance clinical outcomes with AI support",
-    maxScore: 60,
-    thresholds: [24, 39, 48, 60],
+    maxScore: 45,
+    thresholds: [18, 29, 36, 45],
     stages: ["🐛 Crawl", "🚶 Walk", "🏃 Run", "✈️ Fly-Ready"],
     modules: [
       {
@@ -105,8 +105,8 @@ const BANDS = [
     bg: "#FEF3C7",
     roles: "Data Analysts · Actuaries · Health Strategists",
     goal: "Improve population health metrics using AI insights",
-    maxScore: 60,
-    thresholds: [24, 39, 48, 60],
+    maxScore: 45,
+    thresholds: [18, 29, 36, 45],
     stages: ["🐛 Crawl", "🚶 Walk", "🏃 Run", "✈️ Fly-Ready"],
     modules: [
       {
@@ -834,6 +834,36 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
             </h2>
             {bandResults.map((b) => {
               const weakest = [...b.moduleTotals].sort((a, b) => (a.score / a.max) - (b.score / b.max)).slice(0, 2);
+              const isPerfect = b.total === b.maxScore;
+
+              // Role-based recommendations logic
+              const getRoleActions = (role, stage) => {
+                const actions = {
+                  "DevOps Engineer": {
+                    Crawl: ["1. Basic Prompt Engineering for Documentation", "2. Explore claims-automation pilots", "3. Weekly AI sentiment sync"],
+                    Walk: ["1. Deploy Claim-Audit templates", "2. Advanced RAG training", "3. Sentiment analysis optimization"],
+                    Run: ["1. Full claims-flow AI integration", "2. Cross-team AI mentorship", "3. ROI dashboard for AI automation"],
+                    Fly: ["1. Industry lead in AI member-exp", "2. Annual AI security re-cert", "3. Innovation lab participation"]
+                  },
+                  "QA": {
+                    Crawl: ["1. Clinical AI documentation basics", "2. Patient chart summary training", "3. Verification of AI notes workshop"],
+                    Walk: ["1. Predictive triage workflow training", "2. SDOH data extraction bootcamp", "3. Clinical note audit sessions"],
+                    Run: ["1. Lead clinical triage AI pilot", "2. Hallucination detection training", "3. Safety protocol optimization"],
+                    Fly: ["1. Board-level clinical AI strategy", "2. Mentoring junior nursing staff on AI", "3. Ethics committee leadership"]
+                  },
+                  "Manager": {
+                    Crawl: ["1. Data literacy for health metrics", "2. Resource allocation AI basics", "3. Evaluating AI reliability (101)"],
+                    Walk: ["1. Predictive modeling for analysts", "2. Risk score (HCC) AI bootcamp", "3. ROI analysis for AI pilots"],
+                    Run: ["1. Strategy sprint for risk adj.", "2. Manager-led AI ROI reporting", "3. Launch cross-dept AI analytics"],
+                    Fly: ["1. Executive AI Health Leadership", "2. Annual metrics re-evaluation", "3. Capstone board presentation"]
+                  }
+                };
+                const roleKey = role === "DevOps Engineer" || role === "QA" || role === "Manager" ? role : "Manager";
+                return actions[roleKey][stage] || actions["Manager"][stage];
+              };
+
+              const recommendations = getRoleActions(b.id, b.stage.replace(/[^a-zA-Z]/g, ""));
+
               return (
                 <div
                   key={b.id}
@@ -862,7 +892,7 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
                     <div
                       style={{
                         marginLeft: "auto",
-                        background: stageColor(b.stage),
+                        background: stageColor(b.stage.replace(/[^a-zA-Z]/g, "")),
                         color: "white",
                         borderRadius: 6,
                         padding: "2px 8px",
@@ -876,32 +906,38 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                     <div>
                       <div style={{ fontSize: 10, fontWeight: 700, color: C.red, marginBottom: 6 }}>⚠️ BIGGEST GAPS</div>
-                      {weakest.map((m, i) => {
-                        const p = Math.round((m.score / m.max) * 100);
-                        return (
-                          <div
-                            key={i}
-                            style={{
-                              background: "white",
-                              borderRadius: 7,
-                              padding: "8px 10px",
-                              marginBottom: 5,
-                              border: "1px solid #FCA5A5",
-                            }}
-                          >
-                            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                              <span style={{ fontSize: 11, color: "#374151", fontWeight: 600 }}>{m.name}</span>
-                              <span style={{ fontSize: 11, color: C.red, fontWeight: 700 }}>{p}%</span>
+                      {isPerfect ? (
+                        <div style={{ background: "white", borderRadius: 7, padding: "12px", border: "1px solid #BBF7D0", textAlign: "center" }}>
+                          <span style={{ fontSize: 11, color: C.green, fontWeight: 700 }}>🌟 No gaps identified! 100% Score achieved.</span>
+                        </div>
+                      ) : (
+                        weakest.map((m, i) => {
+                          const p = Math.round((m.score / m.max) * 100);
+                          return (
+                            <div
+                              key={i}
+                              style={{
+                                background: "white",
+                                borderRadius: 7,
+                                padding: "8px 10px",
+                                marginBottom: 5,
+                                border: "1px solid #FCA5A5",
+                              }}
+                            >
+                              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                                <span style={{ fontSize: 11, color: "#374151", fontWeight: 600 }}>{m.name}</span>
+                                <span style={{ fontSize: 11, color: C.red, fontWeight: 700 }}>{p}%</span>
+                              </div>
+                              <div style={{ background: "#E5E7EB", borderRadius: 4, height: 6 }}>
+                                <div style={{ background: C.red, height: "100%", borderRadius: 4, width: `${p}%` }} />
+                              </div>
                             </div>
-                            <div style={{ background: "#E5E7EB", borderRadius: 4, height: 6 }}>
-                              <div style={{ background: C.red, height: "100%", borderRadius: 4, width: `${p}%` }} />
-                            </div>
-                          </div>
-                        );
-                      })}
+                          );
+                        })
+                      )}
                     </div>
                     <div>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: C.green, marginBottom: 6 }}>✅ RECOMMENDED ACTIONS</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: C.green, marginBottom: 6 }}>✅ RECOMMENDED ACTIONS (ROLE-BASED)</div>
                       <div
                         style={{
                           background: "white",
@@ -913,14 +949,9 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
                           lineHeight: 1.7,
                         }}
                       >
-                        {b.stage === "Crawl" &&
-                          <>1. Enrol in AI Literacy (1–2 days)<br />2. Deploy daily flash cards<br />3. Assign AI champions</>}
-                        {b.stage === "Walk" &&
-                          <>1. AI Productivity Bootcamp (3–5 days)<br />2. OTS coaching sessions<br />3. Build prompt template library</>}
-                        {b.stage === "Run" &&
-                          <>1. Specialist/Manager Program (4–6 wks)<br />2. Real-time scenario sprints<br />3. Launch team AI pilot</>}
-                        {b.stage === "Fly" &&
-                          <>1. Leadership Program<br />2. Capstone + board presentation<br />3. Annual re-certification</>}
+                        {recommendations.map((action, idx) => (
+                          <div key={idx}>{action}</div>
+                        ))}
                       </div>
                       <div
                         style={{
@@ -934,13 +965,10 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
                       >
                         <span style={{ fontWeight: 700, color: C.navy }}>⏱ Time to next stage: </span>
                         <span style={{ color: C.navy }}>
-                          {b.stage === "Crawl"
-                            ? "3–5 weeks"
-                            : b.stage === "Walk"
-                              ? "4–6 weeks"
-                              : b.stage === "Run"
-                                ? "3–4 weeks"
-                                : "Ongoing excellence"}
+                          {isPerfect ? "Ongoing excellence" :
+                            b.stage.includes("Crawl") ? "3–5 weeks" :
+                            b.stage.includes("Walk") ? "4–6 weeks" :
+                            b.stage.includes("Run") ? "3–4 weeks" : "Ongoing excellence"}
                         </span>
                       </div>
                     </div>
@@ -966,7 +994,7 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
               AIGrev Recommended Training Roadmap
             </h2>
             <p style={{ color: "#6B7280", fontSize: 12, marginBottom: 18 }}>
-              Your personalised APEX training engagement sequence based on audit scores.
+              Your personalized APEX training engagement sequence based on audit scores.
             </p>
             {[
               {
@@ -1134,25 +1162,52 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
   );
 }
 
-function AdminDashboard({ onBack }) {
+function AdminDashboard({ onBack, googleScriptUrl }) {
   const [filterId, setFilterId] = useState("");
   const [filterName, setFilterName] = useState("");
   const [submissions, setSubmissions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("scan_health_assessments") || "[]");
-    setSubmissions(data);
-  }, []);
+    const loadData = async () => {
+      setIsLoading(true);
+      // 1. Load from local first (instant)
+      const localData = JSON.parse(localStorage.getItem("scan_health_assessments") || "[]");
+      setSubmissions(localData);
+
+      // 2. Try to fetch fresh data from Cloud
+      if (googleScriptUrl) {
+        try {
+          const res = await fetch(googleScriptUrl);
+          const cloudData = await res.json();
+          if (Array.isArray(cloudData)) {
+            setSubmissions(cloudData);
+            // Sync local storage with cloud data for offline use
+            localStorage.setItem("scan_health_assessments", JSON.stringify(cloudData));
+          }
+        } catch (e) {
+          console.error("Cloud sync failed:", e);
+        }
+      }
+      setIsLoading(false);
+    };
+
+    loadData();
+  }, [googleScriptUrl]);
 
   const filtered = submissions.filter(s =>
-    (filterId === "" || s.surveyId.toLowerCase().includes(filterId.toLowerCase())) &&
-    (filterName === "" || s.surveyName.toLowerCase().includes(filterName.toLowerCase()))
+    (filterId === "" || (s.surveyId && s.surveyId.toString().toLowerCase().includes(filterId.toLowerCase()))) &&
+    (filterName === "" || (s.surveyName && s.surveyName.toString().toLowerCase().includes(filterName.toLowerCase())))
   );
 
   const teams = [...new Set(submissions.map(s => s.team))].filter(Boolean);
   const industries = [...new Set(submissions.map(s => s.industry))].filter(Boolean);
 
-  const getAvgScore = (list) => list.length ? (list.reduce((a, b) => a + b.score, 0) / list.length).toFixed(1) : 0;
+  const getAvgScore = (list) => {
+    if (!list.length) return 0;
+    const sum = list.reduce((a, b) => a + (Number(b.score) || 0), 0);
+    return (sum / list.length).toFixed(1);
+  };
 
   return (
     <div style={{
@@ -1167,7 +1222,9 @@ function AdminDashboard({ onBack }) {
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 30 }}>
         <div>
           <h1 style={{ color: C.gold, margin: 0, fontSize: 32, fontWeight: 900 }}>Scan Health Hub</h1>
-          <p style={{ color: "rgba(255,255,255,0.5)", margin: 0, fontSize: 13, letterSpacing: "0.1em" }}>ADMINISTRATION DASHBOARD - CRAIG</p>
+          <p style={{ color: "rgba(255,255,255,0.5)", margin: 0, fontSize: 13, letterSpacing: "0.1em" }}>
+            ADMINISTRATION DASHBOARD - CRAIG {isLoading && <span style={{ color: C.gold, marginLeft: 10, fontSize: 10 }}>[ SYNCING... ]</span>}
+          </p>
         </div>
         <button
           onClick={onBack}
@@ -1232,90 +1289,108 @@ function AdminDashboard({ onBack }) {
       <div style={{ marginBottom: 30 }}>
         <div style={{
           background: "rgba(255,255,255,0.05)",
-          backdropFilter: "blur(10px)",
           padding: 25,
           borderRadius: 18,
-          border: `1px solid ${C.teal}44`,
-          boxShadow: "0 8px 32px rgba(0,0,0,0.2)"
+          border: `1px solid ${C.teal}33`,
         }}>
-          <h3 style={{ marginTop: 0, color: C.teal, display: "flex", alignItems: "center", gap: 10 }}>
-            <span>👥</span> Team-wise Analysis
+          <h3 style={{ marginTop: 0, color: C.teal, fontSize: 20, display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
+            👥 Team-wise Analysis
           </h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: 15 }}>
-            {teams.length === 0 ? <p style={{ color: "rgba(255,255,255,0.4)", fontSize: 13 }}>No team data available</p> : teams.map(t => {
-              const teamSubmissions = filtered.filter(s => s.team === t);
-              const pre = teamSubmissions.filter(s => s.assessmentType === "Pre-assessment");
-              const post = teamSubmissions.filter(s => s.assessmentType === "Post-assessment");
-              return (
-                <div key={t} style={{ background: "rgba(255,255,255,0.03)", padding: 15, borderRadius: 12, border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <div style={{ fontWeight: 800, color: "white", fontSize: 16 }}>{t}</div>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: 8, alignItems: "center" }}>
-                    <div style={{ fontSize: 13, color: "rgba(255,255,255,0.7)" }}>Overall Average</div>
-                    <div style={{ fontSize: 18, fontWeight: 900, color: C.gold }}>{getAvgScore(teamSubmissions)}</div>
-                  </div>
-                  <div style={{ display: "flex", gap: 15, marginTop: 10, paddingTop: 10, borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-                    <div style={{ fontSize: 11 }}>
-                      <span style={{ color: "rgba(255,255,255,0.5)" }}>PRE:</span> <span style={{ color: C.teal, fontWeight: 700 }}>{getAvgScore(pre)}</span>
+          {teams.length === 0 ? (
+            <p style={{ color: "rgba(255,255,255,0.4)", textAlign: "center", padding: "20px 0" }}>No team data available</p>
+          ) : (
+            <div style={{ 
+              display: "grid", 
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", 
+              gap: 20 
+            }}>
+              {teams.map(t => {
+                const tSubs = filtered.filter(s => s.team === t);
+                const pre = tSubs.filter(s => s.assessmentType === "Pre-assessment");
+                const post = tSubs.filter(s => s.assessmentType === "Post-assessment");
+                return (
+                  <div key={t} style={{ 
+                    background: "rgba(255,255,255,0.05)", 
+                    padding: 20, 
+                    borderRadius: 12, 
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between"
+                  }}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                      <h4 style={{ margin: 0, fontSize: 18, color: "white" }}>{t || "Unassigned"}</h4>
+                      <div style={{ color: C.gold, fontWeight: 900, fontSize: 24 }}>{getAvgScore(tSubs)}</div>
                     </div>
-                    <div style={{ fontSize: 11 }}>
-                      <span style={{ color: "rgba(255,255,255,0.5)" }}>POST:</span> <span style={{ color: C.purple, fontWeight: 700 }}>{getAvgScore(post)}</span>
+                    <div style={{ 
+                      fontSize: 13, 
+                      color: "rgba(255,255,255,0.5)", 
+                      display: "flex", 
+                      gap: 20,
+                      borderTop: "1px solid rgba(255,255,255,0.05)",
+                      paddingTop: 12
+                    }}>
+                      <span>PRE: <b style={{ color: C.teal }}>{getAvgScore(pre)}</b></span>
+                      <span>POST: <b style={{ color: C.purple }}>{getAvgScore(post)}</b></span>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
 
       <div style={{
         background: "rgba(255,255,255,0.05)",
-        backdropFilter: "blur(10px)",
-        padding: 25,
-        borderRadius: 18,
-        border: `1px solid rgba(255,255,255,0.1)`,
-        boxShadow: "0 8px 32px rgba(0,0,0,0.2)"
+        padding: 30,
+        borderRadius: 20,
+        border: `1px solid ${C.gold}22`,
       }}>
-        <h3 style={{ marginTop: 0, color: C.gold, fontSize: 20, marginBottom: 20 }}>📊 Detailed Submission Logs</h3>
+        <h3 style={{ marginTop: 0, color: C.gold, fontSize: 22, textAlign: "center", marginBottom: 30, display: "flex", alignItems: "center", justifyContent: "center", gap: 15 }}>
+          📊 Detailed Submission Logs
+        </h3>
         <div style={{ overflowX: "auto" }}>
-          <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: "0 8px", fontSize: 13 }}>
+          <table style={{ width: "100%", borderCollapse: "separate", borderSpacing: "0 10px" }}>
             <thead>
-              <tr style={{ textAlign: "left", color: "rgba(255,255,255,0.5)" }}>
-                <th style={{ padding: "10px 15px" }}>Respondent</th>
-                <th style={{ padding: "10px 15px" }}>Team</th>
-                <th style={{ padding: "10px 15px" }}>Phase</th>
-                <th style={{ padding: "10px 15px" }}>Result</th>
-                <th style={{ padding: "10px 15px" }}>Audit ID</th>
-                <th style={{ padding: "10px 15px" }}>Date</th>
+              <tr style={{ color: "rgba(255,255,255,0.5)", fontSize: 13 }}>
+                <th style={{ textAlign: "left", padding: "0 20px" }}>Respondent</th>
+                <th style={{ textAlign: "left" }}>Team</th>
+                <th style={{ textAlign: "left" }}>Phase</th>
+                <th style={{ textAlign: "left" }}>Result</th>
+                <th style={{ textAlign: "left" }}>Audit ID</th>
+                <th style={{ textAlign: "left" }}>Date</th>
               </tr>
             </thead>
             <tbody>
               {filtered.length === 0 ? (
-                <tr><td colSpan="6" style={{ textAlign: "center", padding: 40, color: "rgba(255,255,255,0.2)" }}>No assessment logs found matching filters</td></tr>
-              ) : filtered.map((s, idx) => (
-                <tr key={idx} style={{ background: "rgba(255,255,255,0.03)", borderRadius: 10 }}>
-                  <td style={{ padding: "15px", borderRadius: "10px 0 0 10px", fontWeight: 700 }}>{s.name}</td>
-                  <td style={{ padding: "15px" }}>{s.team}</td>
-                  <td style={{ padding: "15px" }}>
-                    <span style={{
-                      fontSize: 10,
-                      padding: "4px 10px",
-                      borderRadius: 20,
-                      background: s.assessmentType === "Pre-assessment" ? `${C.teal}33` : `${C.purple}33`,
-                      color: s.assessmentType === "Pre-assessment" ? C.teal : "#d8b4fe",
-                      border: `1px solid ${s.assessmentType === "Pre-assessment" ? C.teal : C.purple}44`,
-                      fontWeight: 800,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.05em"
-                    }}>
-                      {s.assessmentType?.split("-")[0] || "Audit"}
-                    </span>
+                <tr>
+                  <td colSpan="6" style={{ textAlign: "center", padding: "40px", color: "rgba(255,255,255,0.3)" }}>
+                    No assessment logs found matching filters
                   </td>
-                  <td style={{ padding: "15px", fontWeight: 900, color: C.gold, fontSize: 16 }}>{s.score}</td>
-                  <td style={{ padding: "15px", color: "rgba(255,255,255,0.6)", fontFamily: "monospace" }}>{s.surveyId}</td>
-                  <td style={{ padding: "15px", borderRadius: "0 10px 10px 0", color: "rgba(255,255,255,0.4)" }}>{new Date(s.timestamp).toLocaleDateString("en-US")}</td>
                 </tr>
-              ))}
+              ) : (
+                filtered.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).map((s, idx) => (
+                  <tr key={idx} style={{ background: "rgba(255,255,255,0.05)", transition: "0.2s" }}>
+                    <td style={{ padding: "20px", borderRadius: "12px 0 0 12px", fontWeight: 800 }}>{s.name}</td>
+                    <td>{s.team}</td>
+                    <td>
+                      <span style={{
+                        background: s.assessmentType === "Pre-assessment" ? "#134e4a" : "#4c1d95",
+                        color: s.assessmentType === "Pre-assessment" ? "#2dd4bf" : "#c084fc",
+                        padding: "4px 10px", borderRadius: 8, fontSize: 10, fontWeight: 800
+                      }}>
+                        {s.assessmentType === "Pre-assessment" ? "PRE" : "POST"}
+                      </span>
+                    </td>
+                    <td style={{ color: C.gold, fontWeight: 900, fontSize: 18 }}>{s.score}</td>
+                    <td style={{ color: "rgba(255,255,255,0.4)", fontSize: 12 }}>{s.surveyId}</td>
+                    <td style={{ padding: "0 20px", borderRadius: "0 12px 12px 0", color: "rgba(255,255,255,0.4)", fontSize: 12 }}>
+                      {s.timestamp ? new Date(s.timestamp).toLocaleDateString("en-GB") : "N/A"}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -1325,6 +1400,7 @@ function AdminDashboard({ onBack }) {
 }
 
 export default function App() {
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwS1PgaHyW6e9PYeyJpiJCZQ4Ul6ZRI_2f-sRm3WeU-9Msdz1maGepBRl3pYktVHFz/exec";
   const [step, setStep] = useState("intro");
 
   // Dynamic pre-fill from URL parameters
@@ -1411,9 +1487,6 @@ export default function App() {
       aiQuestions,
       timestamp: new Date().toISOString()
     };
-
-    // Replace with your actual Google Apps Script Web App URL
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPUZ26taP6o7h8jqNmmn921wtkoc_Qn7LDPwLSJOZdXbViMHCi94--K-w-_MXPekqN/exec";
 
     try {
       // 1. Save to Local Storage (Primary Backup)
@@ -1777,48 +1850,66 @@ export default function App() {
                   <p style={{ color: C.red, fontSize: 11, marginTop: 6 }}>Please select at least one band.</p>
                 )}
               </div>
-              <button
-                onClick={() => {
-                  if (!orgInfo.name || !orgInfo.email || !orgInfo.team) {
-                    alert("Name, Email, and Team are mandatory.");
-                    return;
-                  }
+              <div style={{ display: "flex", gap: 10 }}>
+                <button
+                  onClick={() => setStep("intro")}
+                  style={{
+                    flex: 1,
+                    background: "#F3F4F6",
+                    color: "#374151",
+                    border: "1px solid #E5E7EB",
+                    borderRadius: 10,
+                    padding: "13px",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    fontFamily: "'Segoe UI',sans-serif",
+                  }}
+                >
+                  ← Back
+                </button>
+                <button
+                  onClick={() => {
+                    if (!orgInfo.name || !orgInfo.email || !orgInfo.team) {
+                      alert("Name, Email, and Team are mandatory.");
+                      return;
+                    }
 
-                  // Check for duplicate submission
-                  const history = JSON.parse(localStorage.getItem("scan_health_assessments") || "[]");
-                  const duplicate = history.find(h =>
-                    h.email.toLowerCase() === orgInfo.email.toLowerCase() &&
-                    h.surveyId === orgInfo.surveyId
-                  );
+                    // Check for duplicate submission
+                    const history = JSON.parse(localStorage.getItem("scan_health_assessments") || "[]");
+                    const duplicate = history.find(h =>
+                      h.email.toLowerCase() === orgInfo.email.toLowerCase() &&
+                      h.surveyId === orgInfo.surveyId
+                    );
 
-                  if (duplicate) {
-                    alert("A submission for this Email and Survey ID already exists.");
-                    return;
-                  }
+                    if (duplicate) {
+                      alert("A submission for this Email and Survey ID already exists.");
+                      return;
+                    }
 
-                  if (selectedBands.length > 0) {
-                    setCurBand(0);
-                    setCurMod(0);
-                    setStep("band");
-                  }
-                }}
-                disabled={selectedBands.length === 0}
-                style={{
-                  width: "100%",
-                  background: selectedBands.length > 0 ? `linear-gradient(135deg,${C.navy},${C.navyLt})` : "#E5E7EB",
-                  color: selectedBands.length > 0 ? "white" : "#9CA3AF",
-                  border: "none",
-                  borderRadius: 10,
-                  padding: "13px 28px",
-                  fontSize: 14,
-                  fontWeight: 700,
-                  cursor: selectedBands.length > 0 ? "pointer" : "not-allowed",
-                  paddingBottom: 6,
-                  fontFamily: "'Segoe UI',sans-serif",
-                }}
-              >
-                Start Assessment →
-              </button>
+                    if (selectedBands.length > 0) {
+                      setCurBand(0);
+                      setCurMod(0);
+                      setStep("band");
+                    }
+                  }}
+                  disabled={selectedBands.length === 0}
+                  style={{
+                    flex: 2,
+                    background: selectedBands.length > 0 ? `linear-gradient(135deg,${C.navy},${C.navyLt})` : "#E5E7EB",
+                    color: selectedBands.length > 0 ? "white" : "#9CA3AF",
+                    border: "none",
+                    borderRadius: 10,
+                    padding: "13px",
+                    fontSize: 14,
+                    fontWeight: 700,
+                    cursor: selectedBands.length > 0 ? "pointer" : "not-allowed",
+                    fontFamily: "'Segoe UI',sans-serif",
+                  }}
+                >
+                  Start Assessment →
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -1933,24 +2024,29 @@ export default function App() {
             >
               <strong>Scoring:</strong> 1=Never &nbsp;·&nbsp; 2=Rarely &nbsp;·&nbsp; 3=Sometimes &nbsp;·&nbsp; 4=Often &nbsp;·&nbsp; 5=Expert
             </div>
-            {mod.questions.map((q, qi) => (
-              <QCard
-                key={qi}
-                qNum={curMod * 100 + qi + 1}
-                text={q}
-                value={getScore(cb.id, curMod, qi)}
-                onChange={(v) => setScore(cb.id, curMod, qi, v)}
-                bandColor={cb.color}
-              />
-            ))}
+            {mod.questions.map((q, qi) => {
+              const prevBandsQ = activeBands.slice(0, curBand).reduce((acc, b) => acc + b.modules.reduce((a, m) => a + m.questions.length, 0), 0);
+              const prevModsQ = cb.modules.slice(0, curMod).reduce((acc, m) => acc + m.questions.length, 0);
+              return (
+                <QCard
+                  key={qi}
+                  qNum={prevBandsQ + prevModsQ + qi + 1}
+                  text={q}
+                  value={getScore(cb.id, curMod, qi)}
+                  onChange={(v) => setScore(cb.id, curMod, qi, v)}
+                  bandColor={cb.color}
+                />
+              );
+            })}
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-              {(curMod > 0 || curBand > 0) && (
                 <button
                   onClick={() => {
                     if (curMod > 0) setCurMod((i) => i - 1);
-                    else {
+                    else if (curBand > 0) {
                       setCurBand((i) => i - 1);
                       setCurMod(activeBands[curBand - 1].modules.length - 1);
+                    } else {
+                      setStep("setup");
                     }
                   }}
                   style={{
@@ -1968,7 +2064,6 @@ export default function App() {
                 >
                   ← Back
                 </button>
-              )}
               <button
                 onClick={() => {
                   if (!mDone) return;
@@ -2046,16 +2141,19 @@ export default function App() {
               </p>
             </div>
             <div style={{ padding: "22px 24px" }}>
-              {qs.map((q, i) => (
-                <QCard
-                  key={i}
-                  qNum={i + 1}
-                  text={q}
-                  value={indScores[i] || 0}
-                  onChange={(v) => setIndScores((p) => { const n = [...p]; n[i] = v; return n; })}
-                  bandColor={ind?.color}
-                />
-              ))}
+              {qs.map((q, i) => {
+                const totalBandQs = activeBands.reduce((acc, b) => acc + b.modules.reduce((a, m) => a + m.questions.length, 0), 0);
+                return (
+                  <QCard
+                    key={i}
+                    qNum={totalBandQs + i + 1}
+                    text={q}
+                    value={indScores[i] || 0}
+                    onChange={(v) => setIndScores((p) => { const n = [...p]; n[i] = v; return n; })}
+                    bandColor={ind?.color}
+                  />
+                );
+              })}
               <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
                 <button
                   onClick={() => {
@@ -2106,7 +2204,7 @@ export default function App() {
   }
 
   if (step === "admin") {
-    return <AdminDashboard onBack={() => setStep("intro")} />;
+    return <AdminDashboard onBack={() => setStep("intro")} googleScriptUrl={GOOGLE_SCRIPT_URL} />;
   }
 
   if (step === "results") {
@@ -2229,23 +2327,49 @@ export default function App() {
               />
             </div>
 
-            <button
-              onClick={submitSurvey}
-              style={{
-                width: "100%",
-                background: C.navy,
-                color: "white",
-                border: "none",
-                borderRadius: 9,
-                padding: "14px",
-                fontSize: 15,
-                fontWeight: 700,
-                cursor: "pointer",
-                boxShadow: "0 4px 10px rgba(0,0,0,0.15)"
-              }}
-            >
-              Submit Final Assessment & Feedback
-            </button>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                onClick={() => {
+                  if (selectedIndustry) setStep("industry");
+                  else {
+                    setCurBand(activeBands.length - 1);
+                    setCurMod(activeBands[activeBands.length - 1].modules.length - 1);
+                    setStep("band");
+                  }
+                }}
+                style={{
+                  flex: 1,
+                  background: "#F3F4F6",
+                  color: "#374151",
+                  border: "1px solid #E5E7EB",
+                  borderRadius: 9,
+                  padding: "14px",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  fontFamily: "'Segoe UI',sans-serif",
+                }}
+              >
+                ← Back
+              </button>
+              <button
+                onClick={submitSurvey}
+                style={{
+                  flex: 2,
+                  background: C.navy,
+                  color: "white",
+                  border: "none",
+                  borderRadius: 9,
+                  padding: "14px",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  boxShadow: "0 4px 10px rgba(0,0,0,0.15)"
+                }}
+              >
+                Submit Final Assessment & Feedback
+              </button>
+            </div>
           </div>
         </div>
       </div>
