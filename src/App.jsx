@@ -967,8 +967,8 @@ function ResultsPanel({ allScores, orgInfo, selectedBands, selectedIndustry, ind
                         <span style={{ color: C.navy }}>
                           {isPerfect ? "Ongoing excellence" :
                             b.stage.includes("Crawl") ? "3–5 weeks" :
-                            b.stage.includes("Walk") ? "4–6 weeks" :
-                            b.stage.includes("Run") ? "3–4 weeks" : "Ongoing excellence"}
+                              b.stage.includes("Walk") ? "4–6 weeks" :
+                                b.stage.includes("Run") ? "3–4 weeks" : "Ongoing excellence"}
                         </span>
                       </div>
                     </div>
@@ -1217,8 +1217,8 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
     if (!list.length) return "0.0";
     const sum = list.reduce((a, b) => {
       // Aggressive key search: finds any key that looks like "totalscore" or "score"
-      const scoreKey = Object.keys(b).find(k => 
-        k.toLowerCase().replace(/\s/g, "") === "totalscore" || 
+      const scoreKey = Object.keys(b).find(k =>
+        k.toLowerCase().replace(/\s/g, "") === "totalscore" ||
         k.toLowerCase() === "score"
       );
       const val = scoreKey ? b[scoreKey] : (b.score || b.Score || 0);
@@ -1317,10 +1317,10 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
           {teams.length === 0 ? (
             <p style={{ color: "rgba(255,255,255,0.4)", textAlign: "center", padding: "20px 0" }}>No team data available</p>
           ) : (
-            <div style={{ 
-              display: "grid", 
-              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", 
-              gap: 20 
+            <div style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+              gap: 20
             }}>
               {teams.map(t => {
                 const tSubs = filtered.filter(s => {
@@ -1330,10 +1330,10 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
                 const pre = tSubs.filter(s => (s.assessmentType || s["Assessment Type"] || "").includes("Pre"));
                 const post = tSubs.filter(s => (s.assessmentType || s["Assessment Type"] || "").includes("Post"));
                 return (
-                  <div key={t} style={{ 
-                    background: "rgba(255,255,255,0.05)", 
-                    padding: 20, 
-                    borderRadius: 12, 
+                  <div key={t} style={{
+                    background: "rgba(255,255,255,0.05)",
+                    padding: 20,
+                    borderRadius: 12,
                     border: "1px solid rgba(255,255,255,0.1)",
                     display: "flex",
                     flexDirection: "column",
@@ -1343,10 +1343,10 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
                       <h4 style={{ margin: 0, fontSize: 18, color: "white" }}>{t || "Unassigned"}</h4>
                       <div style={{ color: C.gold, fontWeight: 900, fontSize: 24 }}>{getAvgScore(tSubs)}</div>
                     </div>
-                    <div style={{ 
-                      fontSize: 13, 
-                      color: "rgba(255,255,255,0.5)", 
-                      display: "flex", 
+                    <div style={{
+                      fontSize: 13,
+                      color: "rgba(255,255,255,0.5)",
+                      display: "flex",
                       gap: 20,
                       borderTop: "1px solid rgba(255,255,255,0.05)",
                       paddingTop: 12
@@ -1409,8 +1409,8 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
                     </td>
                     <td style={{ color: C.gold, fontWeight: 900, fontSize: 18 }}>
                       {(() => {
-                        const scoreKey = Object.keys(s).find(k => 
-                          k.toLowerCase().replace(/\s/g, "") === "totalscore" || 
+                        const scoreKey = Object.keys(s).find(k =>
+                          k.toLowerCase().replace(/\s/g, "") === "totalscore" ||
                           k.toLowerCase() === "score"
                         );
                         return scoreKey ? s[scoreKey] : (s.score || s.Score || "0");
@@ -1432,7 +1432,7 @@ function AdminDashboard({ onBack, googleScriptUrl }) {
 }
 
 export default function App() {
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxwS1PgaHyW6e9PYeyJpiJCZQ4Ul6ZRI_2f-sRm3WeU-9Msdz1maGepBRl3pYktVHFz/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_0MddkzR3BDMWijXHXeLKwzGKpqMY2gApJ_WKlOBq3eiHdHOsOAAz4y72tgkzhUed/exec";
   const [step, setStep] = useState("intro");
 
   // Dynamic pre-fill from URL parameters
@@ -1504,40 +1504,52 @@ export default function App() {
     const totalScore = activeBands.reduce((sum, b) => sum + getFlatScores(b.id).reduce((a, x) => a + x, 0), 0);
     const totalMax = activeBands.reduce((sum, b) => sum + b.maxScore, 0);
     const stage = getStage(totalScore, totalMax);
-
     const isPre = orgInfo.assessmentType === "Pre-assessment";
-    const data = {
-      ...orgInfo,
-      type: orgInfo.assessmentType, // Maps to the "Assessment Type" column in your script
-      industry: selectedIndustry,  // Added this so it shows in the Admin Dashboard!
-      score: totalScore,
-      maxScore: totalMax,
-      stage,
-      // Clear out feedback for pre-assessments so they don't show as "0" in your sheet
-      feedback: isPre ? { clarity: "", knowledge: "", quality: "", workedWell: "", improved: "" } : feedback,
-      comment,
-      aiQuestions,
-      timestamp: new Date().toISOString()
+
+    // Explicitly structured payload to match the 19 columns requested
+    const payload = {
+      timestamp: new Date().toISOString(),
+      name: orgInfo.name,
+      email: orgInfo.email,
+      surveyId: orgInfo.surveyId,
+      surveyName: orgInfo.surveyName,
+      team: orgInfo.team,
+      assessmentType: orgInfo.assessmentType,
+      totalScore: Number(totalScore),
+      maxScore: Number(totalMax),
+      stage: stage,
+      // Feedback logic: empty for pre-assessment
+      feedbackClarity: isPre ? "" : feedback.clarity,
+      feedbackKnowledge: isPre ? "" : feedback.knowledge,
+      feedbackQuality: isPre ? "" : feedback.quality,
+      workedWell: isPre ? "" : feedback.workedWell,
+      improved: isPre ? "" : feedback.improved,
+      generalComment: isPre ? "" : comment,
+      // AI Questions
+      aiQ1: aiQuestions.q1,
+      aiQ2: aiQuestions.q2,
+      aiQ3: aiQuestions.q3
     };
 
     try {
-      // 1. Save to Local Storage (Primary Backup)
+      // 1. Save to Local Storage
       const history = JSON.parse(localStorage.getItem("scan_health_assessments") || "[]");
-      history.push(data);
+      // Add local-only fields for Admin Dashboard fuzzy matching
+      history.push({ ...payload, industry: selectedIndustry });
       localStorage.setItem("scan_health_assessments", JSON.stringify(history));
 
-      // 2. Submit to Google Sheets (Async)
+      // 2. Submit to Google Sheets
       if (GOOGLE_SCRIPT_URL) {
         fetch(GOOGLE_SCRIPT_URL, {
           method: "POST",
-          mode: "no-cors", // Required for Google Script CORS
+          mode: "no-cors",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          body: JSON.stringify(payload), // Send the strict payload
         }).catch(e => console.error("Cloud sync failed:", e));
       }
 
       alert('Assessment submitted and saved successfully! 🎉');
-      window.location.href = window.location.pathname; // Reloads to home and clears state
+      window.location.href = window.location.pathname;
     } catch (error) {
       console.error('Error saving assessment:', error);
       alert('Error saving assessment locally');
@@ -2071,31 +2083,31 @@ export default function App() {
               );
             })}
             <div style={{ display: "flex", gap: 10, marginTop: 20 }}>
-                <button
-                  onClick={() => {
-                    if (curMod > 0) setCurMod((i) => i - 1);
-                    else if (curBand > 0) {
-                      setCurBand((i) => i - 1);
-                      setCurMod(activeBands[curBand - 1].modules.length - 1);
-                    } else {
-                      setStep("setup");
-                    }
-                  }}
-                  style={{
-                    flex: 1,
-                    background: "#F3F4F6",
-                    color: "#374151",
-                    border: "1px solid #E5E7EB",
-                    borderRadius: 9,
-                    padding: "11px",
-                    fontSize: 13,
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    fontFamily: "'Segoe UI',sans-serif",
-                  }}
-                >
-                  ← Back
-                </button>
+              <button
+                onClick={() => {
+                  if (curMod > 0) setCurMod((i) => i - 1);
+                  else if (curBand > 0) {
+                    setCurBand((i) => i - 1);
+                    setCurMod(activeBands[curBand - 1].modules.length - 1);
+                  } else {
+                    setStep("setup");
+                  }
+                }}
+                style={{
+                  flex: 1,
+                  background: "#F3F4F6",
+                  color: "#374151",
+                  border: "1px solid #E5E7EB",
+                  borderRadius: 9,
+                  padding: "11px",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  fontFamily: "'Segoe UI',sans-serif",
+                }}
+              >
+                ← Back
+              </button>
               <button
                 onClick={() => {
                   if (!mDone) return;
